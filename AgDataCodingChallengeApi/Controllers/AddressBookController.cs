@@ -1,3 +1,4 @@
+using AddressBookRepositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AgDataCodingChallengeApi.Controllers
@@ -24,7 +25,7 @@ namespace AgDataCodingChallengeApi.Controllers
 		[HttpPost(Name = "Add")]
 		public bool AddAddress(string name, string address)
 		{
-			return _addressBookRepository.AddAddress(name, address);
+			return _addressBookRepository.Add(name, address);
 		}
 	}
 }

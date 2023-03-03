@@ -1,4 +1,4 @@
-﻿namespace AddressBookInMemoryRepository
+﻿namespace AddressBookRepositories
 {
 	public interface IAddressBookRepository
 	{
