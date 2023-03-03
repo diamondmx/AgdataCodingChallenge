@@ -4,10 +4,10 @@
 	{
 		public Dictionary<string, string> AddressBook { get; set; } = new Dictionary<string, string>()
 		{
-			{"Mark", "North" },
-			{"Steve", "South" },
-			{"Erin", "East" },
-			{"Wesley", "West" }
+			//{"Mark", "North" },
+			//{"Steve", "South" },
+			//{"Erin", "East" },
+			//{"Wesley", "West" }
 		};
 
 		public Dictionary<string, string> GetAll()
@@ -21,7 +21,7 @@
 		}
 
 		public bool Delete(string name)
-		{
+		{ 			
 			return AddressBook.Remove(name);
 		}
 

@@ -1,5 +1,6 @@
 using AddressBookRepositories;
 using Microsoft.AspNetCore.Mvc;
+using System.Buffers;
 
 namespace AgDataCodingChallengeApi.Controllers
 {
@@ -23,21 +24,45 @@ namespace AgDataCodingChallengeApi.Controllers
 		}
 
 		[HttpPut("Add", Name = "Add")]
-		public bool AddAddress(string name, string address)
-		{ 
-			return _addressBookRepository.Add(name, address);
+		public IActionResult AddAddress(string name, string address)
+		{
+			if(_addressBookRepository.Add(name, address))
+			{
+				return Created("uri not available", $"{name}:{address}");
+			}
+			else
+			{
+				return BadRequest($"Name \"{name}\" already exists or is invalid");
+			}
+			
 		}
 
 		[HttpPost("Update", Name = "Update")]
-		public bool UpdateAddress(string name, string newAddress)
+		public IActionResult UpdateAddress(string name, string newAddress)
 		{
-			return _addressBookRepository.Update(name, newAddress);
+			if(_addressBookRepository.Update(name, newAddress))
+			{
+				return Ok($"{name}:{newAddress}");
+			}
+			else
+			{
+				return NotFound($"Name \"{name}\" was not found in the address book");
+			}
+
+
 		}
 
 		[HttpDelete("Delete", Name = "Delete")]
-		public bool DeleteAddress(string name)
+		public IActionResult DeleteAddress(string name)
 		{
-			return _addressBookRepository.Delete(name);
+			if(_addressBookRepository.Delete(name))
+			{
+				return Ok($"Name \"{name}\" was deleted");
+			}
+			else
+			{
+				return BadRequest($"Name \"{name}\" was not found in the address book");
+			}
 		}
 	}
 }
