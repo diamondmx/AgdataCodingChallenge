@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AddressBookRepositories", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AddressBookRepositories.NUnit", "AddressBookRepositories.NUnit\AddressBookRepositories.NUnit.csproj", "{6CC6F8AE-0E69-4128-8495-0F3901422234}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AgDataCodingChallengeApi.NUnit", "AgDataCodingChallengeApi.NUnit\AgDataCodingChallengeApi.NUnit.csproj", "{47734F37-4CB5-4539-937E-46EFFEF28627}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{6CC6F8AE-0E69-4128-8495-0F3901422234}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6CC6F8AE-0E69-4128-8495-0F3901422234}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6CC6F8AE-0E69-4128-8495-0F3901422234}.Release|Any CPU.Build.0 = Release|Any CPU
+		{47734F37-4CB5-4539-937E-46EFFEF28627}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47734F37-4CB5-4539-937E-46EFFEF28627}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47734F37-4CB5-4539-937E-46EFFEF28627}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47734F37-4CB5-4539-937E-46EFFEF28627}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
