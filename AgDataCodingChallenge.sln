@@ -5,6 +5,8 @@ VisualStudioVersion = 17.4.33122.133
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AgDataCodingChallengeApi", "AgDataCodingChallengeApi\AgDataCodingChallengeApi.csproj", "{082B2DFD-D15F-4A39-A6EC-213AA409DC7A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AddressBookInMemoryRepository", "AddressBookInMemoryRepository\AddressBookInMemoryRepository.csproj", "{68B36EB7-AEA0-4E83-A051-C6CCA721D38D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{082B2DFD-D15F-4A39-A6EC-213AA409DC7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{082B2DFD-D15F-4A39-A6EC-213AA409DC7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{082B2DFD-D15F-4A39-A6EC-213AA409DC7A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{68B36EB7-AEA0-4E83-A051-C6CCA721D38D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{68B36EB7-AEA0-4E83-A051-C6CCA721D38D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{68B36EB7-AEA0-4E83-A051-C6CCA721D38D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{68B36EB7-AEA0-4E83-A051-C6CCA721D38D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

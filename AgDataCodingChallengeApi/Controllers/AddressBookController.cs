@@ -6,31 +6,25 @@ namespace AgDataCodingChallengeApi.Controllers
 	[Route("[controller]")]
 	public class AddressBookController : ControllerBase
 	{
-		public Dictionary<string, string> AddressBook { get; set; } = new Dictionary<string, string>()
-		{
-			//{"Mark", "North" },
-			//{"Steve", "South" },
-			//{"Erin", "East" },
-			//{"Wesley", "West" }
-		};
-
 		private readonly ILogger<AddressBookController> _logger;
+		private readonly IAddressBookRepository _addressBookRepository;
 
-		public AddressBookController(ILogger<AddressBookController> logger)
+		public AddressBookController(ILogger<AddressBookController> logger, IAddressBookRepository addressBookRepository)
 		{
 			_logger = logger;
+			_addressBookRepository = addressBookRepository;
 		}
 
 		[HttpGet(Name = "GetAll")]
 		public IEnumerable<Tuple<string, string>> Get()
 		{
-			return AddressBook.Select(entry=>new Tuple<string, string>(entry.Key, entry.Value)).ToArray();
+			return _addressBookRepository.GetAll().Select(entry=>new Tuple<string, string>(entry.Key, entry.Value)).ToArray();
 		}
 
 		[HttpPost(Name = "Add")]
 		public bool AddAddress(string name, string address)
 		{
-			return AddressBook.TryAdd(name, address);
+			return _addressBookRepository.AddAddress(name, address);
 		}
 	}
 }
