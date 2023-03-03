@@ -1,10 +1,5 @@
 ﻿namespace AddressBookRepositories
-{
-	public interface IAddressBookRepository
-	{
-		Dictionary<string, string> GetAll();
-		bool Add(string name, string address);
-	}
+{ 
 	public class AddressBookInMemoryRepository : IAddressBookRepository
 	{
 		public Dictionary<string, string> AddressBook { get; set; } = new Dictionary<string, string>()
@@ -24,5 +19,26 @@
 		{
 			return AddressBook.TryAdd(name, address);
 		}
+
+		public bool Delete(string name)
+		{
+			return AddressBook.Remove(name);
+		}
+
+		public bool Update(string name, string newAddress)
+		{
+			if (AddressBook.GetValueOrDefault(name)!= null)
+			{
+				AddressBook[name] = newAddress;
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+			
+			
+		}
+
 	}
 }

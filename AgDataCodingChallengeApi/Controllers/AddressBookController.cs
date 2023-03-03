@@ -16,16 +16,28 @@ namespace AgDataCodingChallengeApi.Controllers
 			_addressBookRepository = addressBookRepository;
 		}
 
-		[HttpGet(Name = "GetAll")]
+		[HttpGet("GetAll", Name = "GetAll")]
 		public IEnumerable<Tuple<string, string>> Get()
 		{
 			return _addressBookRepository.GetAll().Select(entry=>new Tuple<string, string>(entry.Key, entry.Value)).ToArray();
 		}
 
-		[HttpPost(Name = "Add")]
+		[HttpPut("Add", Name = "Add")]
 		public bool AddAddress(string name, string address)
-		{
+		{ 
 			return _addressBookRepository.Add(name, address);
+		}
+
+		[HttpPost("Update", Name = "Update")]
+		public bool UpdateAddress(string name, string newAddress)
+		{
+			return _addressBookRepository.Update(name, newAddress);
+		}
+
+		[HttpDelete("Delete", Name = "Delete")]
+		public bool DeleteAddress(string name)
+		{
+			return _addressBookRepository.Delete(name);
 		}
 	}
 }
