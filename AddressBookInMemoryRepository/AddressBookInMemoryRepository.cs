@@ -42,8 +42,8 @@ namespace AddressBookRepositories
 
 		public AddressBookEntry Get(string name)
 		{
-			var foundEntry = AddressBook.FirstOrDefault(entry=>entry.Key == name);
-			return new AddressBookEntry(foundEntry.Key, foundEntry.Value);
+				var foundEntry = AddressBook.First(entry => entry.Key == name);
+				return new AddressBookEntry(foundEntry.Key, foundEntry.Value);	
 		}
 	}
 }

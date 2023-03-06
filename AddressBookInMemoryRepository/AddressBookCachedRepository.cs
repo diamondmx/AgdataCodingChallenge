@@ -57,11 +57,21 @@ namespace AddressBookRepositories
 				var foundCachedEntry = _memoryCache.First(entry => entry.Key == name);
 				return new AddressBookEntry(foundCachedEntry.Key, foundCachedEntry.Value as string);
 			}
-			catch
+			catch (InvalidOperationException)
+			{
+				// Intentional fall-through to read from non-cached repository
+			}
+
+			try
 			{
 				return _innerRepository.Get(name);
 			}
+			catch(InvalidOperationException)
+			{
+				return null;
+			}
 			
+
 		}
 
 		public bool Update(string name, string newAddress)

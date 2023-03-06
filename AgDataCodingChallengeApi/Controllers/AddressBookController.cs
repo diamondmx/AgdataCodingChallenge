@@ -19,15 +19,26 @@ namespace AgDataCodingChallengeApi.Controllers
 		}
 
 		[HttpGet("GetAll", Name = "GetAll")]
-		public IEnumerable<AddressBookEntry> GetAll()
+		[ProducesResponseType(200, Type=typeof(IEnumerable<AddressBookEntry>))]
+		public IActionResult GetAll()
 		{
-			return _addressBookRepository.GetAll();
+			return Ok(_addressBookRepository.GetAll());
 		}
 
 		[HttpGet("Get", Name = "Get")]
-		public AddressBookEntry Get(string name)
+		[ProducesResponseType(200, Type = typeof(AddressBookEntry))]
+		public IActionResult Get(string name)
 		{
-			return _addressBookRepository.Get(name);
+			var foundResult = _addressBookRepository.Get(name);
+			if(foundResult != null)
+			{
+				return Ok(foundResult);
+			}
+			else
+			{
+
+				return NotFound($"Name \"{name}\" was not found in the address book");
+			}
 		}
 
 
