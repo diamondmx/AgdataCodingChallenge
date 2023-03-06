@@ -29,13 +29,26 @@ namespace AgDataCodingChallengeApi.NUnit
 			_mockAddressBookRepository.Setup(abr => abr.GetAll()).Returns(_testEntries);
 			var sut = new AddressBookController(_mockLogger.Object, _mockAddressBookRepository.Object);
 
-			var result = sut.Get();
+			var result = sut.GetAll();
 			_mockAddressBookRepository.Verify(abr=>abr.GetAll(), Times.Once());
-			Assert.That(result.Count, Is.EqualTo(_testEntries.Count));
+			Assert.That(result.Count(), Is.EqualTo(_testEntries.Count()));
 			_testEntries.ForEach(repoEntry =>
 			{
 				Assert.That(result.ToList().Contains(repoEntry), Is.True);
 			});
+		}
+
+		[Test]
+		public void VerifyGetReturnsCachedItem()
+		{
+			var testEntry = new AddressBookEntry("TestName1", "TestAddress1");
+			_mockAddressBookRepository.Setup(abr => abr.Get("TestName1")).Returns(testEntry);
+			var sut = new AddressBookController(_mockLogger.Object, _mockAddressBookRepository.Object);
+
+			var result = sut.Get("TestName1");
+
+			Assert.That(result, Is.EqualTo(testEntry));
+			_mockAddressBookRepository.Verify(abr => abr.Get("TestName1"), Times.Once());
 		}
 
 		[Test]

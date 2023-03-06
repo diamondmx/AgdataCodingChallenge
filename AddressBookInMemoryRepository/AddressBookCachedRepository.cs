@@ -47,7 +47,21 @@ namespace AddressBookRepositories
 
 		public IEnumerable<AddressBookEntry> GetAll()
 		{
-			return _memoryCache.Select(cacheItem => new AddressBookEntry(cacheItem.Key, cacheItem.Value as string));
+			return _innerRepository.GetAll();
+		}
+
+		public AddressBookEntry Get(string name)
+		{
+			try
+			{
+				var foundCachedEntry = _memoryCache.First(entry => entry.Key == name);
+				return new AddressBookEntry(foundCachedEntry.Key, foundCachedEntry.Value as string);
+			}
+			catch
+			{
+				return _innerRepository.Get(name);
+			}
+			
 		}
 
 		public bool Update(string name, string newAddress)

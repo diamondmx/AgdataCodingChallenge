@@ -13,5 +13,6 @@ namespace AddressBookRepositories
 		bool Add(string name, string address);
 		bool Update(string name, string newAddress);
 		bool Delete(string name);
+		AddressBookEntry Get(string name);
 	}
 }

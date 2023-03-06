@@ -37,10 +37,13 @@ namespace AddressBookRepositories
 			else
 			{
 				return false;
-			}
-			
-			
+			}	
 		}
 
+		public AddressBookEntry Get(string name)
+		{
+			var foundEntry = AddressBook.FirstOrDefault(entry=>entry.Key == name);
+			return new AddressBookEntry(foundEntry.Key, foundEntry.Value);
+		}
 	}
 }
