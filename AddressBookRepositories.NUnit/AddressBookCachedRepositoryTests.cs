@@ -13,6 +13,9 @@ namespace AddressBookRepositories.NUnit
 		private Mock<IAddressBookRepository> _repository;
 		private AddressBookCachedRepository _sut;
 
+		private readonly AddressBookEntry _testEntry1 = new AddressBookEntry("TestName1", "TestAddress1");
+		private readonly AddressBookEntry _testEntry2 = new AddressBookEntry("TestName2", "TestAddress2");
+
 		[SetUp] 
 		public void SetUp() {
 			_repository = new Mock<IAddressBookRepository>();
@@ -24,60 +27,58 @@ namespace AddressBookRepositories.NUnit
 		[Test]
 		public void ValidateAddUpdatesCacheAndRepository()
 		{
-			_repository.Setup(repo => repo.Add("TestName1", "TestAddress1")).Returns(true);
+			_repository.Setup(repo => repo.Add(_testEntry1)).Returns(true);
 
-			var result = _sut.Add("TestName1", "TestAddress1");
+			var result = _sut.Add(_testEntry1);
 			Assert.That(result, Is.True);
 
 			var resultObject = _sut.Get("TestName1");
-			Assert.That(resultObject.Name == "TestName1" && resultObject.Address == "TestAddress1");
-			_repository.Verify(repo => repo.Add("TestName1", "TestAddress1"));
+			Assert.That(resultObject?.Name == _testEntry1.Name && resultObject?.Address == _testEntry1.Address);
+			_repository.Verify(repo => repo.Add(_testEntry1));
 		}
 
 		[Test]
 		public void ValidateUpdateChangesCacheAndRepository()
 		{
-			_repository.Setup(repo => repo.Update("TestName1", "TestAddress1")).Returns(true);
-			_sut.Add("TestName1", "TestAddress1");
+			var testEntryUpdated = new AddressBookEntry(_testEntry1.Name, "TestAddressUpdated");
+			_repository.Setup(repo => repo.Update(testEntryUpdated)).Returns(true);
+			_sut.Add(_testEntry1);
 
-			var result = _sut.Update("TestName1", "TestAddressUpdated");
+			var result = _sut.Update(testEntryUpdated);
 			
 			Assert.That(result, Is.True);
-			var resultObject = _sut.Get("TestName1");
-			Assert.That(resultObject.Name == "TestName1" && resultObject.Address == "TestAddressUpdated");
-			_repository.Verify(repo => repo.Update("TestName1", "TestAddressUpdated"), Times.Once());
+			var resultObject = _sut.Get(_testEntry1.Name);
+			Assert.That(resultObject?.Name == testEntryUpdated.Name && resultObject?.Address == testEntryUpdated.Address);
+			_repository.Verify(repo => repo.Update(testEntryUpdated), Times.Once());
 		}
 
 		[Test]
 		public void ValidateGetAllDoesntRequestFromRepository()
 		{
-			var repoEntries = new List<AddressBookEntry>() {
-				new AddressBookEntry("TestName1", "TestAddress1"),
-				new AddressBookEntry("TestName2", "TestAddress2")
-			};
+			var repoEntries = new List<AddressBookEntry>() { _testEntry1, _testEntry2	};
 			_repository.Setup(repo => repo.GetAll()).Returns(repoEntries);
 
 			var resultList = _sut.GetAll();
 
 			_repository.Verify(repo=>repo.GetAll(), Times.Once());
 			Assert.That(resultList.Count, Is.EqualTo(2));
-			Assert.That(resultList.Any(entry => entry.Name == "TestName1" && entry.Address == "TestAddress1"), Is.True);
-			Assert.That(resultList.Any(entry => entry.Name == "TestName2" && entry.Address == "TestAddress2"), Is.True);
+			Assert.That(resultList.Any(entry => entry.Name == _testEntry1.Name && entry.Address == _testEntry1.Address), Is.True);
+			Assert.That(resultList.Any(entry => entry.Name == _testEntry2.Name && entry.Address == _testEntry2.Address), Is.True);
 		}
 
 		[Test]
 		public void ValidateDeleteUpdatesRepository()
 		{
-			_sut.Add("TestName1", "TestAddress1");
-			_sut.Add("TestName2", "TestAddress2");		
+			_sut.Add(_testEntry1);
+			_sut.Add(_testEntry2);
 
-			_sut.Delete("TestName1");
+			_sut.Delete(_testEntry1.Name);
 
-			_repository.Verify(repo => repo.Delete("TestName1"), Times.Once);
-			var resultShouldntExist = _sut.Get("TestName1");
-			var resultShouldExist = _sut.Get("TestName2");
+			_repository.Verify(repo => repo.Delete(_testEntry1.Name), Times.Once);
+			var resultShouldntExist = _sut.Get(_testEntry1.Name);
+			var resultShouldExist = _sut.Get(_testEntry1.Name);
 
-			Assert.That(resultShouldExist.Address, Is.EqualTo("TestAddress2"));
+			Assert.That(resultShouldExist.Address, Is.EqualTo(_testEntry2.Name));
 			Assert.That(resultShouldntExist, Is.Null);
 
 		}

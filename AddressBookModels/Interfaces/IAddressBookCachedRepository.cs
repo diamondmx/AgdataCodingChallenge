@@ -4,10 +4,10 @@ namespace AddressBookRepositories
 {
 	public interface IAddressBookCachedRepository
 	{
-		bool Add(string name, string address);
+		bool Add(AddressBookEntry newEntry);
 		bool Delete(string name);
 		IEnumerable<AddressBookEntry> GetAll();
-		AddressBookEntry Get(string name);
-		bool Update(string name, string newAddress);
+		AddressBookEntry? Get(string name);
+		bool Update(AddressBookEntry newEntry);
 	}
 }

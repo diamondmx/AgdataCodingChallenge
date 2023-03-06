@@ -58,11 +58,12 @@ namespace AgDataCodingChallengeApi.NUnit
 		[Test]
 		public void VerifyUpdateCallsRepository()
 		{
-			_mockAddressBookRepository.Setup(abr => abr.Update("TestName1", "TestAddressUpdated")).Returns(true);
+			var testEntryUpdated = new AddressBookEntry("TestName1", "TestAddressUpdated");
+			_mockAddressBookRepository.Setup(abr => abr.Update(testEntryUpdated)).Returns(true);
 			var sut = new AddressBookController(_mockLogger.Object, _mockAddressBookRepository.Object);
 
-			var result = sut.UpdateAddress("TestName1", "TestAddressUpdated");
-			_mockAddressBookRepository.Verify(abr => abr.Update("TestName1", "TestAddressUpdated"), Times.Once);
+			var result = sut.UpdateAddress(testEntryUpdated.Name, testEntryUpdated.Address);
+			_mockAddressBookRepository.Verify(abr => abr.Update(testEntryUpdated), Times.Once);
 			Assert.That(result.GetType(), Is.EqualTo(typeof(OkObjectResult)));
 			var resultAsOk = result as OkObjectResult;
 			Assert.That(resultAsOk?.StatusCode, Is.EqualTo(200));

@@ -22,12 +22,12 @@ namespace AddressBookRepositories
 			_innerRepository = innerRepository;
 		}
 
-		public bool Add(string name, string address)
+		public bool Add(AddressBookEntry newEntry)
 		{
-			var itemWasAdded = _memoryCache.Add(name, address, _policy);
+			var itemWasAdded = _memoryCache.Add(newEntry.Name, newEntry.Address, _policy);
 			if (itemWasAdded)
 			{
-				_innerRepository.Add(name, address);
+				_innerRepository.Add(newEntry);
 			}
 
 			return itemWasAdded;
@@ -50,37 +50,20 @@ namespace AddressBookRepositories
 			return _innerRepository.GetAll();
 		}
 
-		public AddressBookEntry Get(string name)
+		public AddressBookEntry? Get(string name)
 		{
-			try
-			{
-				var foundCachedEntry = _memoryCache.First(entry => entry.Key == name);
-				return new AddressBookEntry(foundCachedEntry.Key, foundCachedEntry.Value as string);
-			}
-			catch (InvalidOperationException)
-			{
-				// Intentional fall-through to read from non-cached repository
-			}
+				var result = _memoryCache.AddOrGetExisting(name, _innerRepository.Get(name), _policy) as AddressBookEntry;
 
-			try
-			{
-				return _innerRepository.Get(name);
-			}
-			catch(InvalidOperationException)
-			{
-				return null;
-			}
-			
-
+				return result;
 		}
 
-		public bool Update(string name, string newAddress)
+		public bool Update(AddressBookEntry newEntry)
 		{
-			var previousAddress = _memoryCache.Get(name);
-			if (previousAddress!=null && previousAddress.ToString() != newAddress)
+			var previousAddress = _memoryCache.Get(newEntry.Name);
+			if (previousAddress!=null && previousAddress.ToString() != newEntry.Address)
 			{
-				_memoryCache.Set(name, newAddress, _policy);
-				_innerRepository.Update(name, newAddress);
+				_memoryCache.Set(newEntry.Name, newEntry.Address, _policy);
+				_innerRepository.Update(newEntry);
 				return true;
 			}
 			else

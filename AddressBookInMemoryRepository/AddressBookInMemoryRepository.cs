@@ -17,9 +17,9 @@ namespace AddressBookRepositories
 			return AddressBook.Select(entry=>new AddressBookEntry(entry.Key, entry.Value));
 		}
 
-		public bool Add(string name, string address)
+		public bool Add(AddressBookEntry newEntry)
 		{
-			return AddressBook.TryAdd(name, address);
+			return AddressBook.TryAdd(newEntry.Name, newEntry.Address);
 		}
 
 		public bool Delete(string name)
@@ -27,11 +27,11 @@ namespace AddressBookRepositories
 			return AddressBook.Remove(name);
 		}
 
-		public bool Update(string name, string newAddress)
+		public bool Update(AddressBookEntry newEntry)
 		{
-			if (AddressBook.GetValueOrDefault(name)!= null)
+			if (AddressBook.GetValueOrDefault(newEntry.Name)!= null)
 			{
-				AddressBook[name] = newAddress;
+				AddressBook[newEntry.Name] = newEntry.Address;
 				return true;
 			}
 			else

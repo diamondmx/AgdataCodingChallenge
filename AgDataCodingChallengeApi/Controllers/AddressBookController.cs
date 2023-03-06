@@ -45,9 +45,10 @@ namespace AgDataCodingChallengeApi.Controllers
 		[HttpPut("Add", Name = "Add")]
 		public IActionResult AddAddress(string name, string address)
 		{
-			if(_addressBookRepository.Add(name, address))
+			var newEntry = new AddressBookEntry(name, address);
+			if(_addressBookRepository.Add(newEntry))
 			{
-				return Created("uri not available", $"{name}:{address}");
+				return Created("uri not available", newEntry);
 			}
 			else
 			{
@@ -59,9 +60,10 @@ namespace AgDataCodingChallengeApi.Controllers
 		[HttpPost("Update", Name = "Update")]
 		public IActionResult UpdateAddress(string name, string newAddress)
 		{
-			if(_addressBookRepository.Update(name, newAddress))
+			var newEntry = new AddressBookEntry(name, newAddress);
+			if(_addressBookRepository.Update(newEntry))
 			{
-				return Ok($"{name}:{newAddress}");
+				return Ok(newEntry);
 			}
 			else
 			{

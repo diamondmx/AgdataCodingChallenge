@@ -7,6 +7,9 @@ namespace AddressBookRepositories.NUnit
 {
 	public class Tests
 	{
+		private readonly AddressBookEntry _testEntry1 = new AddressBookEntry("TestName1", "TestAddress1");
+		private readonly AddressBookEntry _testEntry2 = new AddressBookEntry("TestName2", "TestAddress2");
+
 		[SetUp]
 		public void Setup()
 		{
@@ -83,35 +86,38 @@ namespace AddressBookRepositories.NUnit
 		public void UpdateOneItem()
 		{
 			var sut = new AddressBookInMemoryRepository();
-			sut.Add("TestName1", "TestLocation1");
-			sut.Add("TestName2", "TestLocation2");
+			sut.Add(_testEntry1);
+			sut.Add(_testEntry2);
 			var initialSetResult = sut.GetAll();
 			Assert.That(initialSetResult.Count, Is.EqualTo(2));
+			var testEntryUpdated = new AddressBookEntry(_testEntry1.Name, "TestAddressUpdated");
 
-			var returnValue = sut.Update("TestName1", "TestLocationUpdated");
+			var returnValue = sut.Update(testEntryUpdated);
+
 			Assert.That(returnValue, Is.True);
 			var finalSetResult = sut.GetAll();
 			Assert.That(finalSetResult.Count, Is.EqualTo(2));
-			Assert.That(finalSetResult.Any(entry => entry.Name == "TestName1" && entry.Address == "TestLocationUpdated"), Is.True);
-			Assert.That(finalSetResult.Any(entry => entry.Name == "TestName2" && entry.Address == "TestLocation2"), Is.True);
+			Assert.That(finalSetResult.Any(entry => entry.Name == _testEntry1.Name && entry.Address == testEntryUpdated.Address), Is.True);
+			Assert.That(finalSetResult.Any(entry => entry.Name == _testEntry2.Name && entry.Address == testEntryUpdated.Address), Is.True);
 		}
 
 		[Test]
 		public void UpdateMissingItem()
 		{
 			var sut = new AddressBookInMemoryRepository();
-			sut.Add("TestName1", "TestLocation1");
-			sut.Add("TestName2", "TestLocation2");
+			sut.Add(_testEntry1);
+			sut.Add(_testEntry2);
 			var initialSetResult = sut.GetAll();
 			Assert.That(initialSetResult.Count, Is.EqualTo(2));
 
-			var returnValue = sut.Update("TestNameMissing", "TestLocationUpdated");
+			var testEntryUpdated = new AddressBookEntry(_testEntry1.Name, "TestAddressUpdated");
+			var returnValue = sut.Update(testEntryUpdated);
 			Assert.That(returnValue, Is.False);
 			var finalSetResult = sut.GetAll();
 			
 			Assert.That(finalSetResult.Count, Is.EqualTo(2));
-			Assert.That(finalSetResult.Any(entry => entry.Name == "TestName1" && entry.Address == "TestLocation1"), Is.True);
-			Assert.That(finalSetResult.Any(entry => entry.Name == "TestName2" && entry.Address == "TestLocation2"), Is.True);
+			Assert.That(finalSetResult.Any(entry => entry.Name == _testEntry1.Name && entry.Address == testEntryUpdated.Address), Is.True);
+			Assert.That(finalSetResult.Any(entry => entry.Name == _testEntry2.Name && entry.Address == _testEntry2.Address), Is.True);
 		}
 	}
 }

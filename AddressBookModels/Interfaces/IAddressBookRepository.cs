@@ -10,8 +10,8 @@ namespace AddressBookRepositories
 	public interface IAddressBookRepository
 	{
 		IEnumerable<AddressBookEntry> GetAll();
-		bool Add(string name, string address);
-		bool Update(string name, string newAddress);
+		bool Add(AddressBookEntry newEntry);
+		bool Update(AddressBookEntry newEntry);
 		bool Delete(string name);
 		AddressBookEntry Get(string name);
 	}
