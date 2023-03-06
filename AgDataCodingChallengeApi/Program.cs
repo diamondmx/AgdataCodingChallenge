@@ -9,6 +9,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<IAddressBookRepository, AddressBookInMemoryRepository>();
+builder.Services.AddSingleton<IAddressBookCachedRepository, AddressBookCachedRepository>();
 
 var app = builder.Build();
 

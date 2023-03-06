@@ -1,4 +1,6 @@
-﻿namespace AddressBookRepositories
+﻿using AddressBookModels.DataModels;
+
+namespace AddressBookRepositories
 { 
 	public class AddressBookInMemoryRepository : IAddressBookRepository
 	{
@@ -10,9 +12,9 @@
 			//{"Wesley", "West" }
 		};
 
-		public Dictionary<string, string> GetAll()
+		public IEnumerable<AddressBookEntry> GetAll()
 		{
-			return AddressBook;
+			return AddressBook.Select(entry=>new AddressBookEntry(entry.Key, entry.Value));
 		}
 
 		public bool Add(string name, string address)

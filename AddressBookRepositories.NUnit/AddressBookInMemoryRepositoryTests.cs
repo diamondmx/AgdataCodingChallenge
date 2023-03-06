@@ -1,3 +1,5 @@
+using AddressBookModels.DataModels;
+using System.Linq;
 using System.Net;
 using System.Net.Http.Headers;
 
@@ -32,7 +34,7 @@ namespace AddressBookRepositories.NUnit
 
 			var finalSetResult = sut.GetAll();
 			Assert.That(finalSetResult.Count, Is.EqualTo(1));
-			Assert.That(finalSetResult["TestName"], Is.EqualTo("TestLocation"));
+			Assert.That(finalSetResult.Any(entry => entry.Name == "TestName" && entry.Address == "TestLocation"), Is.True);
 		}
 
 		[Test]
@@ -55,10 +57,10 @@ namespace AddressBookRepositories.NUnit
 
 			var finalSetResult = sut.GetAll();
 			Assert.That(finalSetResult.Count, Is.EqualTo(4));
-			Assert.That(finalSetResult["TestName1"], Is.EqualTo("TestLocation1"));
-			Assert.That(finalSetResult["TestName2"], Is.EqualTo("TestLocation2"));
-			Assert.That(finalSetResult["TestName3"], Is.EqualTo("TestLocation3"));
-			Assert.That(finalSetResult["TestName4"], Is.EqualTo("TestLocation4"));
+			Assert.That(finalSetResult.Any(entry => entry.Name == "TestName1" && entry.Address == "TestLocation1"), Is.True);
+			Assert.That(finalSetResult.Any(entry => entry.Name == "TestName2" && entry.Address == "TestLocation2"), Is.True);
+			Assert.That(finalSetResult.Any(entry => entry.Name == "TestName3" && entry.Address == "TestLocation3"), Is.True);
+			Assert.That(finalSetResult.Any(entry => entry.Name == "TestName4" && entry.Address == "TestLocation4"), Is.True);
 		}
 
 		[Test]
@@ -74,7 +76,7 @@ namespace AddressBookRepositories.NUnit
 			Assert.That(returnValue, Is.True);
 			var finalSetResult = sut.GetAll();
 			Assert.That(finalSetResult.Count, Is.EqualTo(1));
-			Assert.That(finalSetResult["TestName2"], Is.EqualTo("TestLocation2"));
+			Assert.That(finalSetResult.Any(entry => entry.Name == "TestName2" && entry.Address == "TestLocation2"), Is.True);
 		}
 
 		[Test]
@@ -90,8 +92,8 @@ namespace AddressBookRepositories.NUnit
 			Assert.That(returnValue, Is.True);
 			var finalSetResult = sut.GetAll();
 			Assert.That(finalSetResult.Count, Is.EqualTo(2));
-			Assert.That(finalSetResult["TestName1"], Is.EqualTo("TestLocationUpdated"));
-			Assert.That(finalSetResult["TestName2"], Is.EqualTo("TestLocation2"));
+			Assert.That(finalSetResult.Any(entry => entry.Name == "TestName1" && entry.Address == "TestLocationUpdated"), Is.True);
+			Assert.That(finalSetResult.Any(entry => entry.Name == "TestName2" && entry.Address == "TestLocation2"), Is.True);
 		}
 
 		[Test]
@@ -108,8 +110,8 @@ namespace AddressBookRepositories.NUnit
 			var finalSetResult = sut.GetAll();
 			
 			Assert.That(finalSetResult.Count, Is.EqualTo(2));
-			Assert.That(finalSetResult["TestName1"], Is.EqualTo("TestLocation1"));
-			Assert.That(finalSetResult["TestName2"], Is.EqualTo("TestLocation2"));
+			Assert.That(finalSetResult.Any(entry => entry.Name == "TestName1" && entry.Address == "TestLocation1"), Is.True);
+			Assert.That(finalSetResult.Any(entry => entry.Name == "TestName2" && entry.Address == "TestLocation2"), Is.True);
 		}
 	}
 }

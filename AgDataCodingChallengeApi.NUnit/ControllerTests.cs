@@ -1,3 +1,4 @@
+using AddressBookModels.DataModels;
 using AddressBookRepositories;
 using AgDataCodingChallengeApi.Controllers;
 using Castle.Core.Logging;
@@ -10,10 +11,10 @@ namespace AgDataCodingChallengeApi.NUnit
 	public class Tests
 	{
 		private Mock<Microsoft.Extensions.Logging.ILogger<AgDataCodingChallengeApi.Controllers.AddressBookController>> _mockLogger = new Mock<Microsoft.Extensions.Logging.ILogger<AgDataCodingChallengeApi.Controllers.AddressBookController>>();
-		private Mock<IAddressBookRepository> _mockAddressBookRepository = new Mock<IAddressBookRepository>();
-		private Dictionary<string, string> _testRepositoryContents = new Dictionary<string, string>{
-				{"TestName1", "TestAddress1"},
-				{"TestName2", "TestAddress2"}
+		private Mock<IAddressBookCachedRepository> _mockAddressBookRepository = new Mock<IAddressBookCachedRepository>();
+		private List<AddressBookEntry> _testEntries = new List<AddressBookEntry>() { 
+			new AddressBookEntry("TestName1", "TestAddress1"),
+			new AddressBookEntry("TestName2", "TestAddress2")
 		};
 
 		[SetUp]
@@ -25,16 +26,15 @@ namespace AgDataCodingChallengeApi.NUnit
 		[Test]
 		public void VerifyGetAllReturnsAll()
 		{
-			_mockAddressBookRepository.Setup(abr => abr.GetAll()).Returns(_testRepositoryContents);
+			_mockAddressBookRepository.Setup(abr => abr.GetAll()).Returns(_testEntries);
 			var sut = new AddressBookController(_mockLogger.Object, _mockAddressBookRepository.Object);
 
 			var result = sut.Get();
 			_mockAddressBookRepository.Verify(abr=>abr.GetAll(), Times.Once());
-			Assert.That(result.Count, Is.EqualTo(_testRepositoryContents.Count));
-			_testRepositoryContents.ToList().ForEach(repoEntry =>
+			Assert.That(result.Count, Is.EqualTo(_testEntries.Count));
+			_testEntries.ForEach(repoEntry =>
 			{
-				var checkAgainst = new Tuple<string,string>(repoEntry.Key, repoEntry.Value);
-				Assert.That(result.ToList().Contains(checkAgainst), Is.True);
+				Assert.That(result.ToList().Contains(repoEntry), Is.True);
 			});
 		}
 

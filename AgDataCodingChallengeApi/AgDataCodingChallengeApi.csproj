@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AddressBookInMemoryRepository\AddressBookRepositories.csproj" />
+    <ProjectReference Include="..\AddressBookModels\AddressBookModels.csproj" />
   </ItemGroup>
 
 </Project>

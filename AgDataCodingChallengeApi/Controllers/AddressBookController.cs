@@ -1,3 +1,4 @@
+using AddressBookModels.DataModels;
 using AddressBookRepositories;
 using Microsoft.AspNetCore.Mvc;
 using System.Buffers;
@@ -9,18 +10,18 @@ namespace AgDataCodingChallengeApi.Controllers
 	public class AddressBookController : ControllerBase
 	{
 		private readonly ILogger<AddressBookController> _logger;
-		private readonly IAddressBookRepository _addressBookRepository;
+		private readonly IAddressBookCachedRepository _addressBookRepository;
 
-		public AddressBookController(ILogger<AddressBookController> logger, IAddressBookRepository addressBookRepository)
+		public AddressBookController(ILogger<AddressBookController> logger, IAddressBookCachedRepository addressBookRepository)
 		{
 			_logger = logger;
 			_addressBookRepository = addressBookRepository;
 		}
 
 		[HttpGet("GetAll", Name = "GetAll")]
-		public IEnumerable<Tuple<string, string>> Get()
+		public IEnumerable<AddressBookEntry> Get()
 		{
-			return _addressBookRepository.GetAll().Select(entry=>new Tuple<string, string>(entry.Key, entry.Value)).ToArray();
+			return _addressBookRepository.GetAll();
 		}
 
 		[HttpPut("Add", Name = "Add")]
