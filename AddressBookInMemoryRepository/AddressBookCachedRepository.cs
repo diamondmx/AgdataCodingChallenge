@@ -16,6 +16,7 @@ namespace AddressBookRepositories
 		private readonly IAddressBookRepository _innerRepository;
 		private MemoryCache _memoryCache = MemoryCache.Default;
 		private CacheItemPolicy _policy = new CacheItemPolicy();
+		private DateTime cacheRetrievedTime = DateTime.MinValue;
 
 		public AddressBookCachedRepository(IAddressBookRepository innerRepository) {
 			_innerRepository = innerRepository;
@@ -62,6 +63,11 @@ namespace AddressBookRepositories
 			{
 				return false; // May want more specific error here for nonexistant vs no update?
 			}
+		}
+
+		public void InvalidateCache()
+		{
+			_memoryCache.Trim(100);
 		}
 	}
 }

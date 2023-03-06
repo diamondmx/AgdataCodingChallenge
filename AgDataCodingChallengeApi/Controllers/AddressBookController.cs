@@ -19,9 +19,9 @@ namespace AgDataCodingChallengeApi.Controllers
 		}
 
 		[HttpGet("GetAll", Name = "GetAll")]
-		public IEnumerable<AddressBookEntry> Get()
+		public List<AddressBookEntry> Get()
 		{
-			return _addressBookRepository.GetAll();
+			return _addressBookRepository.GetAll().ToList();
 		}
 
 		[HttpPut("Add", Name = "Add")]

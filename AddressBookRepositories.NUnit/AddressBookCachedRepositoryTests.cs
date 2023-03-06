@@ -10,17 +10,20 @@ namespace AddressBookRepositories.NUnit
 	public class AddressBookCachedRepositoryTests
 	{
 		private Mock<IAddressBookRepository> _repository;
+		private AddressBookCachedRepository _sut;
 
 		[SetUp] 
 		public void SetUp() {
+			_repository = new Mock<IAddressBookRepository>();
+			_sut = new AddressBookCachedRepository(_repository.Object);
+			_sut.InvalidateCache();
+
 		}
 
 		[Test]
 		public void ValidateAddUpdatesCacheAndRepository()
 		{
-			_repository = new Mock<IAddressBookRepository>();
 			_repository.Setup(repo => repo.Add("TestName1", "TestAddress1")).Returns(true);
-			var _sut = new AddressBookCachedRepository(_repository.Object);
 
 			var result = _sut.Add("TestName1", "TestAddress1");
 			Assert.That(result, Is.True);
@@ -34,9 +37,7 @@ namespace AddressBookRepositories.NUnit
 		[Test]
 		public void ValidateUpdateChangesCacheAndRepository()
 		{
-			_repository = new Mock<IAddressBookRepository>();
 			_repository.Setup(repo => repo.Update("TestName1", "TestAddress1")).Returns(true);
-			var _sut = new AddressBookCachedRepository(_repository.Object);
 			_sut.Add("TestName1", "TestAddress1");
 			var initialResultSet = _sut.GetAll();
 			Assert.That(initialResultSet.Count(), Is.EqualTo(1));
@@ -54,9 +55,6 @@ namespace AddressBookRepositories.NUnit
 		[Test]
 		public void ValidateGetAllDoesntRequestFromRepository()
 		{
-			_repository = new Mock<IAddressBookRepository>();
-			var _sut = new AddressBookCachedRepository(_repository.Object);
-
 			_sut.GetAll();
 
 			_repository.VerifyNoOtherCalls();
@@ -65,8 +63,6 @@ namespace AddressBookRepositories.NUnit
 		[Test]
 		public void ValidateDeleteUpdatesRepository()
 		{
-			_repository = new Mock<IAddressBookRepository>();
-			var _sut = new AddressBookCachedRepository(_repository.Object);
 			_sut.Add("TestName1", "TestAddress1");
 			_sut.Add("TestName2", "TestAddress2");
 			var initialResultSet = _sut.GetAll();
