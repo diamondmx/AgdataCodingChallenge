@@ -12,6 +12,7 @@ namespace AgDataCodingChallengeApi.NUnit
 	{
 		private Mock<Microsoft.Extensions.Logging.ILogger<AgDataCodingChallengeApi.Controllers.AddressBookController>> _mockLogger = new Mock<Microsoft.Extensions.Logging.ILogger<AgDataCodingChallengeApi.Controllers.AddressBookController>>();
 		private Mock<IAddressBookCachedRepository> _mockAddressBookRepository = new Mock<IAddressBookCachedRepository>();
+
 		private List<AddressBookEntry> _testEntries = new List<AddressBookEntry>() { 
 			new AddressBookEntry("TestName1", "TestAddress1"),
 			new AddressBookEntry("TestName2", "TestAddress2")
@@ -85,11 +86,12 @@ namespace AgDataCodingChallengeApi.NUnit
 		[Test]
 		public void VerifyAddCallsRepository()
 		{
-			_mockAddressBookRepository.Setup(abr => abr.Add("TestName3", "TestAddress3")).Returns(true);
+			var testEntry3 = new AddressBookEntry("TestName3", "TestAddress3");
+			_mockAddressBookRepository.Setup(abr => abr.Add(It.IsAny<AddressBookEntry>())).Returns(true);
 			var sut = new AddressBookController(_mockLogger.Object, _mockAddressBookRepository.Object);
 
-			var result = sut.AddAddress("TestName3", "TestAddress3");
-			_mockAddressBookRepository.Verify(abr => abr.Add("TestName3", "TestAddress3"), Times.Once);
+			var result = sut.AddAddress(testEntry3.Name, testEntry3.Address);
+			_mockAddressBookRepository.Verify(abr => abr.Add(It.Is<AddressBookEntry>(entryParam => entryParam.Name == "TestName3" && entryParam.Address == "TestAddress3")), Times.Once);
 			Assert.That(result.GetType(), Is.EqualTo(typeof(CreatedResult)));
 			var resultAsCreated = result as CreatedResult;
 			Assert.That(resultAsCreated?.StatusCode, Is.EqualTo(201));

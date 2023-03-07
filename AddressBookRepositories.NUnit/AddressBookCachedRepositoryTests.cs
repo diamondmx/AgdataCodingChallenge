@@ -28,11 +28,12 @@ namespace AddressBookRepositories.NUnit
 		public void ValidateAddUpdatesCacheAndRepository()
 		{
 			_repository.Setup(repo => repo.Add(_testEntry1)).Returns(true);
+			_repository.Setup(repo => repo.Get(_testEntry1.Name)).Returns(_testEntry1);
 
 			var result = _sut.Add(_testEntry1);
 			Assert.That(result, Is.True);
 
-			var resultObject = _sut.Get("TestName1");
+			var resultObject = _sut.Get(_testEntry1.Name);
 			Assert.That(resultObject?.Name == _testEntry1.Name && resultObject?.Address == _testEntry1.Address);
 			_repository.Verify(repo => repo.Add(_testEntry1));
 		}
@@ -76,9 +77,9 @@ namespace AddressBookRepositories.NUnit
 
 			_repository.Verify(repo => repo.Delete(_testEntry1.Name), Times.Once);
 			var resultShouldntExist = _sut.Get(_testEntry1.Name);
-			var resultShouldExist = _sut.Get(_testEntry1.Name);
+			var resultShouldExist = _sut.Get(_testEntry2.Name);
 
-			Assert.That(resultShouldExist.Address, Is.EqualTo(_testEntry2.Name));
+			Assert.That(resultShouldExist.Address, Is.EqualTo(_testEntry2.Address));
 			Assert.That(resultShouldntExist, Is.Null);
 
 		}

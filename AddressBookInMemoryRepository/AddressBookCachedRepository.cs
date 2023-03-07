@@ -18,7 +18,8 @@ namespace AddressBookRepositories
 		private CacheItemPolicy _policy = new CacheItemPolicy();
 		private DateTime cacheRetrievedTime = DateTime.MinValue;
 
-		public AddressBookCachedRepository(IAddressBookRepository innerRepository) {
+		public AddressBookCachedRepository(IAddressBookRepository innerRepository)
+		{
 			_innerRepository = innerRepository;
 		}
 
@@ -36,7 +37,7 @@ namespace AddressBookRepositories
 		public bool Delete(string name)
 		{
 			var itemRemoved = _memoryCache.Remove(name);
-			if (itemRemoved!=null)
+			if (itemRemoved != null)
 			{
 				_innerRepository.Delete(name);
 			}
@@ -52,15 +53,30 @@ namespace AddressBookRepositories
 
 		public AddressBookEntry? Get(string name)
 		{
-				var result = _memoryCache.AddOrGetExisting(name, _innerRepository.Get(name), _policy) as AddressBookEntry;
-
-				return result;
+			try
+			{
+				var cachedEntry = _memoryCache.Get(name);
+				
+				if(cachedEntry != null)
+				{
+					return new AddressBookEntry(name, cachedEntry as string);
+				}
+				else
+				{
+					var storedEntry = _innerRepository.Get(name);
+					return storedEntry;
+				}
+			}
+			catch (InvalidOperationException) 
+			{
+				return null;
+			}
 		}
 
 		public bool Update(AddressBookEntry newEntry)
 		{
 			var previousAddress = _memoryCache.Get(newEntry.Name);
-			if (previousAddress!=null && previousAddress.ToString() != newEntry.Address)
+			if (previousAddress != null && previousAddress.ToString() != newEntry.Address)
 			{
 				_memoryCache.Set(newEntry.Name, newEntry.Address, _policy);
 				_innerRepository.Update(newEntry);
